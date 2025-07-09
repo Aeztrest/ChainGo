@@ -8,7 +8,7 @@
 ChainGo is a decentralized marketplace platform that lets users **publish, discover, and trade listings** using blockchain technology. It combines **Next.js**, **Stacks blockchain**, and **Clarity smart contracts** to create a seamless Web3 experience.
 
 ## 🚀 Live Demo
-> Coming Soon...
+> https://hackathon.goktugtunc.com/ (ChainGo)
 
 ## 🔗 Repository
 [GitHub Repository](https://github.com/Aeztrest/Web3-Marketplace)
