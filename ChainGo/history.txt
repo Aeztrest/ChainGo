@@ -1,0 +1,58 @@
+#V2
+(load "token")
+(contract-call? .token mint 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG u1000)
+(contract-call? .token get-balance 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG)
+(as-contract .token\n  (contract-call? .token transfer 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0 u500)\n)
+(as-contract .token (contract-call? .token transfer 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0 u500) )
+(tx-sender 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG\n  (contract-call? .token transfer 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0 u500)\n)
+(tx-sender 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG (contract-call? .token transfer 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0 u500))
+::set-tx-sender 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG\n
+(as-contract .token\n  (contract-call? .token transfer 'ALICI-ADDRESS u500)\n)\n
+::set-tx-sender 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG
+::help
+::set-tx-sender 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG
+(contract-call? .token transfer 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0 u500)
+::set-caller 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM\n
+(contract-call? .token get-balance tx-sender)
+(contract-call? .token mint tx-sender u1000)
+(contract-call? .token get-balance tx-sender)
+(contract-call? .token transfer 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0 u500)
+(contract-call? .token get-balance ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0)
+(contract-call? .token get-balance 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0)
+(contract-call? .token get-balance tx-sender)
+(contract-call? .marketplace add-product "Monitor 24 inch" u400)
+(contract-call? .marketplace get-product u0)
+(contract-call? .marketplace get-product u1)
+(print tx-sender)
+(as-contract .token\n  (contract-call? .token mint 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP u500)\n)
+(as-contract .token (contract-call? .token mint 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP u500) )
+(contract-call? .token mint 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP u500)
+(contract-call? .token get-balance 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP)
+(tx-sender 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP\n  (contract-call? .marketplace buy-product u0)\n)
+(tx-sender 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP (contract-call? .marketplace buy-product u0) )
+(contract-call? .marketplace buy-product u0)
+(contract-call? .marketplace buy-product u1)
+(contract-call? .marketplace get-product u1)
+(print tx-sender)
+(contract-call? .token get-balance tx-sender)
+clear
+(get-product u1)
+(get-product (u1))
+(contract-call? .marketplace get-product u1)
+(contract-call? .marketplace add-product "Monitor 24 inch" u400)
+(contract-call? .marketplace get-product u1)
+(contract-call? .token get-balance 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP)
+(contract-call? .token get-balance tx-sender)
+(contract-call? .token mint tx-sender u500)
+(contract-call? .token get-balance tx-sender)
+(contract-call? .marketplace buy-product u1)
+(contract-call? .token get-balance tx-sender)
+(contract-call? .marketplace get-product u1)
+::help
+clarinet tests
+clarinet test
+test
+(get-balance (tx-sender))
+clear
+cls
+contract-call? .token mint tx-sender u1000
