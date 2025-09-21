@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation"
 import {
   connectStacksWallet,
   checkStacksConnection,
-  getStacksAccountDetails,
   checkUserExistsWithStacks,
   saveStacksUserData,
   clearStacksSession,
@@ -21,7 +20,6 @@ export default function LoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Sayfa yüklendiğinde bağlantı durumunu kontrol et
     checkInitialConnection()
   }, [])
 
@@ -31,20 +29,17 @@ export default function LoginPage() {
     setIsConnected(connected)
 
     if (connected) {
-      console.log("✅ Kullanıcı zaten bağlı, kullanıcı verilerini kontrol ediliyor...")
+      console.log("✅ Kullanıcı zaten bağlı, kullanıcı verileri kontrol ediliyor...")
       handleExistingConnection()
     }
   }
 
   const handleExistingConnection = async () => {
     try {
-      // Mevcut kullanıcı verilerini al
       const userData = JSON.parse(localStorage.getItem("stacks_user_data") || "null")
-
       if (userData) {
         console.log("👤 Mevcut Stacks kullanıcı verileri bulundu:", userData)
 
-        // Backend'e kullanıcı kontrolü yap
         const backendResult = await checkUserExistsWithStacks(userData)
 
         if (backendResult && backendResult.status === true) {
@@ -67,7 +62,6 @@ export default function LoginPage() {
     console.log("🚀 Stacks wallet bağlantısı başlatılıyor...")
 
     try {
-      // Stacks wallet'a bağlan
       const stacksUser = await connectStacksWallet()
 
       if (!stacksUser) {
@@ -79,9 +73,7 @@ export default function LoginPage() {
 
       console.log("🎉 Stacks wallet bağlantısı başarılı!")
       setIsConnected(true)
-      
-      // Backend'e kullanıcı kontrolü yap
-      console.log("🔍 Backend'e kullanıcı kontrolü yapılıyor...")
+
       const backendResult = await checkUserExistsWithStacks(stacksUser)
 
       if (!backendResult) {
@@ -91,27 +83,14 @@ export default function LoginPage() {
         return
       }
 
-      // Backend sonucuna göre yönlendirme
       if (backendResult.status === true) {
         console.log("✅ Kullanıcı mevcut - Giriş başarılı!")
-        console.log("🔐 JWT token alındı:", backendResult.token ? "Var" : "Yok")
-        console.log("👤 Kullanıcı bilgileri:", backendResult.user)
-
-        // Kullanıcı verilerini kaydet
         saveStacksUserData(stacksUser, backendResult)
-
-        console.log("🎉 Giriş başarılı - Ürünler sayfasına yönlendiriliyor")
         router.push("/products")
       } else {
         console.log("➕ Yeni kullanıcı - Kayıt sayfasına yönlendiriliyor")
-
-        // STX adresini al
         const stxAddress = stacksUser.addresses?.stx?.[0]?.address || ""
-        console.log("📍 Kayıt için STX adresi:", stxAddress)
-
-        // Stacks verilerini geçici olarak kaydet
         localStorage.setItem("stacks_user_data", JSON.stringify(stacksUser))
-
         router.push(`/register?wallet_address=${stxAddress}`)
       }
     } catch (error) {
@@ -132,7 +111,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -146,7 +124,6 @@ export default function LoginPage() {
           <p className="text-gray-600 mt-2">Stacks wallet'ınızla güvenli giriş yapın</p>
         </div>
 
-        {/* Login Card */}
         <Card>
           <CardHeader className="text-center">
             <CardTitle>Giriş Yap</CardTitle>
@@ -204,7 +181,6 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
-        {/* Security Info */}
         <div className="mt-6 text-center text-sm text-gray-500">
           <p>🔒 Stacks blockchain ile güvenli ve merkezi olmayan giriş</p>
         </div>

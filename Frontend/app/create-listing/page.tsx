@@ -20,40 +20,19 @@ interface ListingForm {
   description: string
   price: string
   category: string
-  location: string
-  condition: string
   username: string
   images: File[] // File array olarak değiştir
 }
 
 const categories = [
-  "Elektronik",
-  "Bilgisayar",
-  "Telefon",
-  "Ayakkabı",
-  "Giyim",
-  "Ev & Yaşam",
-  "Kitap",
-  "Spor",
-  "Oyun",
-  "Müzik",
-  "Araç",
-  "Diğer",
-]
-
-const conditions = ["Sıfır", "Sıfır Ayarında", "Az Kullanılmış", "Orta", "Eskimiş"]
-
-const locations = [
-  "İstanbul",
-  "Ankara",
-  "İzmir",
-  "Bursa",
-  "Antalya",
-  "Adana",
-  "Konya",
-  "Gaziantep",
-  "Mersin",
-  "Kayseri",
+  "Tümü",
+  "Tasarım & Kreatif",
+  "Müzik & Ses",
+  "Video & Animasyon",
+  "Yazılım & Teknoloji",
+  "Dijital Eğitim",
+  "NFT",
+  "E-Kitap",
 ]
 
 export default function CreateListingPage() {
@@ -62,8 +41,6 @@ export default function CreateListingPage() {
     description: "",
     price: "",
     category: "",
-    location: "",
-    condition: "",
     username: "",
     images: [],
   })
@@ -162,15 +139,13 @@ export default function CreateListingPage() {
       submitData.append("description", formData.description)
       submitData.append("price", formData.price)
       submitData.append("category", formData.category || "")
-      submitData.append("location", formData.location || "")
-      submitData.append("condition", formData.condition || "")
       submitData.append("username", formData.username)
 
       formData.images.forEach((file) => {
         submitData.append("images", file)
       })
 
-      const response = await fetch("https://back.goktugtunc.com/create_listing", {
+      const response = await fetch("https://hackback.hackstack.com.tr/create_listing", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -251,7 +226,7 @@ export default function CreateListingPage() {
                       id="title"
                       value={formData.title}
                       onChange={(e) => handleInputChange("title", e.target.value)}
-                      placeholder="Örn: iPhone 13 Pro Max 256GB"
+                      placeholder="Örn: Ceza - Beatcoin"
                       maxLength={100}
                       className="h-12"
                       required
@@ -412,48 +387,6 @@ export default function CreateListingPage() {
                     </Select>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label>Durum</Label>
-                    <Select value={formData.condition} onValueChange={(value) => handleInputChange("condition", value)}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Ürün durumu (opsiyonel)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {conditions.map((condition) => (
-                          <SelectItem key={condition} value={condition}>
-                            {condition}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Konum */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <MapPin className="h-5 w-5 mr-2" />
-                    Konum
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <Label>Şehir</Label>
-                    <Select value={formData.location} onValueChange={(value) => handleInputChange("location", value)}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Şehir seçin (opsiyonel)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {locations.map((location) => (
-                          <SelectItem key={location} value={location}>
-                            {location}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </CardContent>
               </Card>
 

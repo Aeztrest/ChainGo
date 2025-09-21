@@ -11,7 +11,7 @@ ChainGo is a decentralized marketplace platform that lets users **publish, disco
 > https://hackathon.hackstack.com.tr/ (ChainGo)
 
 ## 🔗 Repository
-[GitHub Repository](https://github.com/Aeztrest/Web3-Marketplace)
+[GitHub Repository](https://github.com/Aeztrest/ChainGO)
 
 ---
 
@@ -48,7 +48,7 @@ ChainGo is a decentralized marketplace platform that lets users **publish, disco
 
 ```bash
 # Frontend
-cd ChainGo-Frontend
+cd Frontend
 pnpm install
 pnpm dev
 

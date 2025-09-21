@@ -54,7 +54,7 @@ export default function FavoritesPage() {
   // Resim URL'ini oluştur
   const getImageUrl = (imageName: string) => {
     if (!imageName) return "/placeholder.svg?height=200&width=200"
-    return `https://back.goktugtunc.com/uploads/${imageName}`
+    return `https://hackback.hackstack.com.tr/uploads/${imageName}`
   }
 
   // Tarih formatla

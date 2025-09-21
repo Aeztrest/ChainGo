@@ -49,7 +49,7 @@ export default function RegisterPage() {
 
     try {
       // Kullanıcı kayıt işlemi
-      const response = await fetch("https://back.goktugtunc.com/create_new_user", {
+      const response = await fetch("https://hackback.hackstack.com.tr/create_new_user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

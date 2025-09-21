@@ -1,10 +1,15 @@
+# --- Dependencies ---
 node_modules/
 Frontend/node_modules/
 Backend/node_modules/
+
+# --- Next.js build/cache ---
 .next/
 Frontend/.next/
 .out/
 out/
+
+# Turbopack/Vite/Parcel caches
 .turbo/
 Frontend/.turbo/
 .vite/
@@ -12,8 +17,13 @@ Frontend/.vite/
 .parcel-cache/
 Frontend/.parcel-cache/
 .cache/
+**/.cache/
+
+# --- Build outputs ---
 dist/
 build/
+
+# --- Logs & OS junk ---
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -21,3 +31,6 @@ pnpm-debug.log*
 *.log
 .DS_Store
 Thumbs.db
+
+# --- (isteğin üzerine .env izinde) ---
+# .env  (BİLEREK ignore etmiyoruz)

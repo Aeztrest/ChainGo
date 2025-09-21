@@ -18,8 +18,6 @@ interface Listing {
   description: string
   price: string
   category: string
-  location: string
-  item_condition: string
   username: string
   images: string[]
   created_at: string
@@ -49,18 +47,13 @@ export default function ProductsPage() {
 
   const categories = [
     "Tümü",
-    "Elektronik",
-    "Bilgisayar",
-    "Telefon",
-    "Ayakkabı",
-    "Giyim",
-    "Ev & Yaşam",
-    "Kitap",
-    "Spor",
-    "Oyun",
-    "Müzik",
-    "Araç",
-    "Diğer",
+    "Tasarım & Kreatif",
+    "Müzik & Ses",
+    "Video & Animasyon",
+    "Yazılım & Teknoloji",
+    "Dijital Eğitim",
+    "NFT",
+    "E-Kitap",
   ]
 
   useEffect(() => {
@@ -96,7 +89,7 @@ export default function ProductsPage() {
       setIsLoading(true)
       console.log(`📤 Sayfa ${page} için ürünler getiriliyor...`)
 
-      const response = await fetch(`https://back.goktugtunc.com/list_active_listings?page=${page}&page_size=50`)
+      const response = await fetch(`https://hackback.hackstack.com.tr/list_active_listings?page=${page}&page_size=50`)
 
       console.log("📥 API yanıtı:", response.status, response.ok)
 
@@ -141,7 +134,7 @@ export default function ProductsPage() {
     if (!imageName) return "/placeholder.svg?height=200&width=200"
 
     console.log("🖼️ Resim URL oluşturuluyor:", imageName)
-    const imageUrl = `https://back.goktugtunc.com/uploads/${imageName}`
+    const imageUrl = `https://hackback.hackstack.com.tr/uploads/${imageName}`
     console.log("📸 Tam resim URL:", imageUrl)
 
     return imageUrl
@@ -348,9 +341,6 @@ export default function ProductsPage() {
                       <Heart className={`h-4 w-4 ${favoriteStates[listing.id] ? "fill-current" : ""}`} />
                     </Button>
                     <Badge className="absolute top-2 left-2 bg-blue-600">{listing.category}</Badge>
-                    {listing.item_condition && (
-                      <Badge className="absolute bottom-2 left-2 bg-green-600">{listing.item_condition}</Badge>
-                    )}
                   </div>
 
                   <CardHeader className="pb-2">
@@ -366,10 +356,6 @@ export default function ProductsPage() {
                   </CardHeader>
 
                   <CardContent className="pt-0">
-                    <div className="flex items-center text-sm text-gray-500 mb-2">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      {listing.location}
-                    </div>
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <div className="flex items-center">
                         <User className="h-4 w-4 mr-1" />

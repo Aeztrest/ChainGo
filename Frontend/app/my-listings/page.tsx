@@ -25,8 +25,6 @@ interface UserListing {
   description: string
   price: string
   category: string
-  location: string
-  item_condition: string
   username: string
   images: string[]
   created_at: string
@@ -67,7 +65,7 @@ export default function MyListingsPage() {
       console.log(`📤 ${username} kullanıcısının ilanları getiriliyor...`)
 
       const response = await fetch(
-        `https://back.goktugtunc.com/get_user_listings?username=${encodeURIComponent(username)}`,
+        `https://hackback.hackstack.com.tr/get_user_listings?username=${encodeURIComponent(username)}`,
         {
           method: "GET",
           headers: {
@@ -113,7 +111,7 @@ export default function MyListingsPage() {
       console.log(`🗑️ İlan siliniyor: ${listingId}`)
 
       const response = await fetch(
-        `https://back.goktugtunc.com/delete_listing/${listingId}?username=${userInfo.username}`,
+        `https://hackback.hackstack.com.tr/delete_listing/${listingId}?username=${userInfo.username}`,
         {
           method: "DELETE",
         },
@@ -141,7 +139,7 @@ export default function MyListingsPage() {
   // Resim URL'ini oluştur
   const getImageUrl = (imageName: string) => {
     if (!imageName) return "/placeholder.svg?height=200&width=200"
-    return `https://back.goktugtunc.com/uploads/${imageName}`
+    return `https://hackback.hackstack.com.tr/uploads/${imageName}`
   }
 
   // Tarih formatla
@@ -295,11 +293,6 @@ export default function MyListingsPage() {
                       {/* Kategori Badge */}
                       <Badge className="absolute top-2 right-2 bg-blue-600">{listing.category}</Badge>
 
-                      {/* Durum Badge */}
-                      {listing.item_condition && (
-                        <Badge className="absolute bottom-2 left-2 bg-orange-600">{listing.item_condition}</Badge>
-                      )}
-
                       {/* Çoklu Resim Göstergesi */}
                       {listing.images.length > 1 && (
                         <Badge className="absolute bottom-2 right-2 bg-black/50 text-white">
@@ -320,10 +313,6 @@ export default function MyListingsPage() {
                     <CardContent className="pt-0 space-y-3">
                       {/* Konum ve Tarih */}
                       <div className="space-y-1">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <MapPin className="h-4 w-4 mr-1" />
-                          {listing.location}
-                        </div>
                         <div className="flex items-center text-sm text-gray-500">
                           <Calendar className="h-4 w-4 mr-1" />
                           {formatDate(listing.created_at)}

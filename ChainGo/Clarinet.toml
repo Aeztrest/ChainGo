@@ -25,3 +25,6 @@ path = "contracts/marketplace.clar"
 [repl.remote_data]
 enabled = false
 api_url = 'https://api.hiro.so'
+
+[accounts.deployer]
+mnemonic = "disagree urge gain ready gain inspire dizzy future label song shrimp practice vanish slight merge picture parrot make patient crime safe ozone mandate park"

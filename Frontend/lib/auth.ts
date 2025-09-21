@@ -26,7 +26,7 @@ export const verifyToken = async (): Promise<TokenVerifyResponse | null> => {
 
     console.log("📤 JWT token doğrulanıyor...")
 
-    const response = await fetch("https://back.goktugtunc.com/verify_token", {
+    const response = await fetch("https://hackback.hackstack.com.tr/verify_token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

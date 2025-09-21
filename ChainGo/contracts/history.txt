@@ -1,0 +1,8 @@
+#V2
+::publish token\n
+publish marketplace
+;;publish marketplace
+;;publish token
+clear
+;;publish token
+;;publish marketplace

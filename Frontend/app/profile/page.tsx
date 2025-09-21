@@ -11,7 +11,7 @@ import { ShoppingBag, ArrowLeft, User, Wallet, Package, Heart, Loader2 } from "l
 import Link from "next/link"
 import { getFavoriteCount } from "@/lib/favorites"
 import { requireAuth, logout, type User as AuthUser } from "@/lib/auth"
-import { checkStacksConnection, getLocalStorage } from "@stacks/connect"
+import { checkStacksConnection, connectStacksWallet } from "@/lib/stacks-auth"
 
 interface UserInfo {
   name?: string
@@ -56,7 +56,6 @@ export default function ProfilePage() {
       console.log("🔐 Profil sayfası auth durumu:", authStatus.isAuthenticated)
       console.log("👤 Auth user bilgisi:", authStatus.user)
 
-      // Auth başarılıysa profil verilerini yükle
       loadProfileData()
     } catch (error) {
       console.error("❌ Auth kontrolü hatası:", error)
@@ -66,15 +65,13 @@ export default function ProfilePage() {
     }
   }
 
-  const loadProfileData = () => {
+  const loadProfileData = async () => {
     try {
       setIsLoading(true)
       console.log("📤 Profil verileri yükleniyor...")
 
       // Backend'den gelen kullanıcı bilgilerini al
       const savedUserInfo = localStorage.getItem("user_info")
-      console.log("💾 localStorage user_info:", savedUserInfo)
-
       if (savedUserInfo) {
         const backendUser = JSON.parse(savedUserInfo)
         console.log("👤 Backend kullanıcı bilgileri:", backendUser)
@@ -83,24 +80,18 @@ export default function ProfilePage() {
 
       // Stacks kullanıcı verilerini al
       const stacksData = localStorage.getItem("stacks_user_data")
-      console.log("💾 localStorage stacks_user_data:", stacksData)
-
       if (stacksData) {
         const stacksUser = JSON.parse(stacksData)
-        console.log("🔗 Stacks kullanıcı verileri:", stacksUser)
+        console.log("🔗 Stacks kullanıcı verileri (localStorage):", stacksUser)
         setStacksUserData(stacksUser)
       } else {
-        // localStorage'da yoksa Stacks Connect'ten al
-        console.log("🔍 Stacks Connect'ten kullanıcı verileri alınıyor...")
-        const stacksConnected = checkStacksConnection()
-
-        if (stacksConnected) {
-          const stacksUser = getLocalStorage()
-          console.log("🔗 Stacks Connect'ten alınan veriler:", stacksUser)
-
+        console.log("🔍 Wallet bağlantısı kontrol ediliyor...")
+        const connected = checkStacksConnection()
+        if (connected) {
+          console.log("🔗 Wallet bağlı, adresler çekiliyor...")
+          const stacksUser = await connectStacksWallet()
           if (stacksUser) {
             setStacksUserData(stacksUser)
-            // localStorage'a da kaydet
             localStorage.setItem("stacks_user_data", JSON.stringify(stacksUser))
           }
         }
@@ -109,7 +100,6 @@ export default function ProfilePage() {
       // Favori sayısını yükle
       const favCount = getFavoriteCount()
       setFavoriteCount(favCount)
-      console.log("❤️ Favori sayısı:", favCount)
     } catch (error) {
       console.error("❌ Profil verileri yüklenirken hata:", error)
     } finally {
@@ -122,61 +112,34 @@ export default function ProfilePage() {
     router.push("/login")
   }
 
-  // Kullanıcı adını al (backend'den veya Stacks'ten)
+  // Kullanıcı adını al
   const getUserName = (): string => {
-    if (userInfo?.name) {
-      return userInfo.name
-    }
-    if (userInfo?.username) {
-      return userInfo.username
-    }
-    if (user?.username) {
-      return user.username
-    }
+    if (userInfo?.name) return userInfo.name
+    if (userInfo?.username) return userInfo.username
+    if (user?.username) return user.username
     return "Kullanıcı"
   }
 
-  // Kullanıcı username'ini al
   const getUserUsername = (): string => {
-    if (userInfo?.username) {
-      return userInfo.username
-    }
-    if (user?.username) {
-      return user.username
-    }
+    if (userInfo?.username) return userInfo.username
+    if (user?.username) return user.username
     return "username"
   }
 
-  // Wallet adresini al (Stacks'ten veya backend'den)
   const getWalletAddress = (): string => {
-    // Önce Stacks verilerinden STX adresini al
     if (stacksUserData?.addresses?.stx?.[0]?.address) {
       return stacksUserData.addresses.stx[0].address
     }
+    if (userInfo?.wallet_address) return userInfo.wallet_address
+    if (userInfo?.wallet) return userInfo.wallet
+    if (user?.wallet) return user.wallet
 
-    // Sonra backend'den gelen wallet bilgisini kontrol et
-    if (userInfo?.wallet_address) {
-      return userInfo.wallet_address
-    }
-
-    if (userInfo?.wallet) {
-      return userInfo.wallet
-    }
-
-    if (user?.wallet) {
-      return user.wallet
-    }
-
-    // localStorage'dan STX adresini al
     const stxAddress = localStorage.getItem("stacks_address")
-    if (stxAddress) {
-      return stxAddress
-    }
+    if (stxAddress) return stxAddress
 
     return "Wallet adresi bulunamadı"
   }
 
-  // Üyelik tarihini al
   const getMembershipDate = (): string => {
     if (userInfo?.created_at) {
       return new Date(userInfo.created_at).toLocaleDateString("tr-TR")
@@ -184,7 +147,6 @@ export default function ProfilePage() {
     return "Bilinmiyor"
   }
 
-  // Auth yüklenirken loading göster
   if (isAuthLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -235,7 +197,7 @@ export default function ProfilePage() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sol Sidebar */}
+          {/* Sidebar */}
           <div className="lg:col-span-1">
             <Card>
               <CardHeader className="text-center">
@@ -255,19 +217,11 @@ export default function ProfilePage() {
                 </div>
                 <Separator />
                 <div className="space-y-2">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start bg-transparent"
-                    onClick={() => router.push("/my-listings")}
-                  >
+                  <Button variant="outline" className="w-full justify-start" onClick={() => router.push("/my-listings")}>
                     <Package className="h-4 w-4 mr-2" />
                     İlanlarım
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start bg-transparent"
-                    onClick={() => router.push("/favorites")}
-                  >
+                  <Button variant="outline" className="w-full justify-start" onClick={() => router.push("/favorites")}>
                     <Heart className="h-4 w-4 mr-2" />
                     Favorilerim
                     {favoriteCount > 0 && (
@@ -276,12 +230,16 @@ export default function ProfilePage() {
                       </Badge>
                     )}
                   </Button>
+                  <Button variant="outline" className="w-full justify-start" onClick={() => router.push("/get-my-purchases")}>
+                    <Package className="h-4 w-4 mr-2" />
+                    Satın Alımlarım
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Ana İçerik */}
+          {/* Main */}
           <div className="lg:col-span-3 space-y-6">
             {/* Profil Bilgileri */}
             <Card>
@@ -318,12 +276,9 @@ export default function ProfilePage() {
                   <div className="p-4 bg-gray-50 rounded-lg border">
                     <code className="text-sm break-all">{getWalletAddress()}</code>
                   </div>
-                  <p className="text-xs text-gray-500">
-                    Bu adres Stacks blockchain üzerindeki wallet adresinizdir ve değiştirilemez.
-                  </p>
+                  <p className="text-xs text-gray-500">Bu adres Stacks blockchain üzerindeki wallet adresinizdir ve değiştirilemez.</p>
                 </div>
 
-                {/* BTC Adresi varsa göster */}
                 {stacksUserData?.addresses?.btc?.[0]?.address && (
                   <div className="space-y-2">
                     <Label>BTC Wallet Adresi</Label>
@@ -336,7 +291,7 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
 
-            {/* İstatistikler */}
+            {/* Stats */}
             <Card>
               <CardHeader>
                 <CardTitle>Hesap İstatistikleri</CardTitle>

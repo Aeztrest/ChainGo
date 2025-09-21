@@ -9,6 +9,7 @@ from Listings.list_active_listings import router as active_listings_router
 from Listings.get_listing_with_id import router as idlisting_listings_router
 from Listings.get_user_listings import router as user_listings_router
 from Listings.delete_listing import router as delete_listing_router
+from Listings.get_user_purchases import router as get_user_purchases
 from Login.verify_token import router as verify_token_router
 from Purchase.complete_purchase import router as complete_purchase_router
 import requests
@@ -34,11 +35,10 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",             # local development
-        "http://localhost:3003",
-        "http://goktugtunc.com",             # live frontend
-        "https://goktugtunc.com",            # ssl varsa
-        "https://wallet.goktugtunc.com"      # subdomain varsa
+        "http://localhost:2323",             # local development
+        "http://hackathon.hackstack.com.tr",             # live frontend
+        "https://hackathon.hackstack.com.tr",            # ssl varsa
+        "https://wallet.hackstack.com"      # subdomain varsa
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -54,6 +54,7 @@ app.include_router(delete_listing_router)
 app.include_router(verify_token_router)
 app.include_router(complete_purchase_router)
 app.include_router(get_wallet_router)
+app.include_router(get_user_purchases)
 app.mount("/uploads", StaticFiles(directory=os.path.join(os.getcwd(), "uploads")), name="uploads")
 
 @app.middleware("http")

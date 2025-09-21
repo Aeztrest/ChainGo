@@ -10,14 +10,14 @@ plan:
       transactions:
         - contract-publish:
             contract-name: token
-            expected-sender: ST234JJ3B80Q8VV2XBQM6VJZNFF8ZP5V60BER64HX
+            expected-sender: STXMMAFP901VW7BBKSPP00FY0E7D9GNA82R4Z9KM
             cost: 11120
             path: contracts/token.clar
             anchor-block-only: true
             clarity-version: 1
         - contract-publish:
             contract-name: marketplace
-            expected-sender: ST234JJ3B80Q8VV2XBQM6VJZNFF8ZP5V60BER64HX
+            expected-sender: STXMMAFP901VW7BBKSPP00FY0E7D9GNA82R4Z9KM
             cost: 13840
             path: contracts/marketplace.clar
             anchor-block-only: true

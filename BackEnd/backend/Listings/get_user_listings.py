@@ -21,8 +21,6 @@ def get_user_listings(username: str = Query(...), db: Session = Depends(get_db))
                 "description": listing.description,
                 "price": str(listing.price),
                 "category": listing.category,
-                "location": listing.location,
-                "item_condition": listing.item_condition,
                 "username": listing.username,
                 "images": json.loads(listing.images or "[]"),
                 "created_at": listing.created_at.isoformat(),

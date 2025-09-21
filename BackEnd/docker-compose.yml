@@ -6,16 +6,16 @@ services:
     container_name: my-mysql-ezgin
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}r
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - chaingo_mysql_data:/var/lib/mysql
     restart: always
     networks:
-      - mynetwork
+      - chaingonetwork
   
   phpmyadmin:
     image: linuxserver/phpmyadmin
@@ -28,14 +28,15 @@ services:
       - "${PMA_PORT}:80"
     restart: always
     networks:
-      - mynetwork
-
-  
+      - chaingonetwork
 
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
+    platform: linux/amd64
     container_name: my-backend-ezgin
+    working_dir: /app
     volumes:
       - ./backend:/app
     ports:
@@ -44,12 +45,13 @@ services:
       - mysql
     restart: always
     networks:
-      - mynetwork
+      - chaingonetwork
+
 
 volumes:
-  mysql_data:
+  chaingo_mysql_data:
 
 networks:
-  mynetwork:
+  chaingonetwork:
     driver: bridge
 

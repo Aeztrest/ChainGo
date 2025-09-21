@@ -30,8 +30,6 @@ class Listing(Base):
     description = Column(Text, nullable=False)
     price = Column(DECIMAL(10, 2), nullable=False)
     category = Column(String(100))
-    location = Column(String(255))
-    item_condition = Column(String(50))
     username = Column(String(100))
     images = Column(Text)  # JSON string olarak kaydedeceğiz
     is_sold = Column(Boolean, default=False)
@@ -46,8 +44,6 @@ class Listing(Base):
             "description": self.description,
             "price": str(self.price),
             "category": self.category,
-            "location": self.location,
-            "item_condition": self.item_condition,
             "username": self.username,
             "images": json.loads(self.images) if self.images else [],
             "created_at": self.created_at.isoformat(),

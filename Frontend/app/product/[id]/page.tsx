@@ -34,8 +34,6 @@ interface ProductDetail {
   description: string
   price: string
   category: string
-  location: string
-  item_condition: string
   username: string
   images: string[]
   created_at: string
@@ -107,7 +105,7 @@ export default function ProductDetailPage() {
       setIsLoading(true)
       console.log(`📤 Ürün detayı getiriliyor: ${productId}`)
 
-      const response = await fetch(`https://back.goktugtunc.com/get_listing/${productId}`)
+      const response = await fetch(`https://hackback.hackstack.com.tr/get_listing/${productId}`)
 
       console.log("📥 API yanıtı:", response.status, response.ok)
 
@@ -137,7 +135,7 @@ export default function ProductDetailPage() {
     if (!imageName) return "/placeholder.svg?height=400&width=400"
 
     console.log("🖼️ Detay sayfası resim URL oluşturuluyor:", imageName)
-    const imageUrl = `https://back.goktugtunc.com/uploads/${imageName}`
+    const imageUrl = `https://hackback.hackstack.com.tr/uploads/${imageName}`
     console.log("📸 Detay sayfası tam resim URL:", imageUrl)
 
     return imageUrl
@@ -238,7 +236,7 @@ export default function ProductDetailPage() {
       console.log("📤 Satıcının wallet adresi getiriliyor:", sellerUsername)
 
       const response = await fetch(
-        `https://back.goktugtunc.com/get_user_wallet?username=${encodeURIComponent(sellerUsername)}`,
+        `https://hackback.hackstack.com.tr/get_user_wallet?username=${encodeURIComponent(sellerUsername)}`,
       )
 
       if (response.ok) {
@@ -263,7 +261,7 @@ export default function ProductDetailPage() {
       console.log("👤 Buyer:", buyerUsername)
       console.log("🔗 TX ID:", txId)
 
-      const response = await fetch("https://back.goktugtunc.com/complete_purchase", {
+      const response = await fetch("https://hackback.hackstack.com.tr/complete_purchase", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -727,7 +725,6 @@ export default function ProductDetailPage() {
                     <CardTitle className="text-2xl mb-2">{product.title}</CardTitle>
                     <div className="flex items-center space-x-2 mb-4">
                       <Badge className="bg-blue-600">{product.category}</Badge>
-                      <Badge variant="secondary">{product.item_condition}</Badge>
                       {product.is_sold ? (
                         <Badge className="bg-gray-600">Satıldı</Badge>
                       ) : (
@@ -855,19 +852,6 @@ export default function ProductDetailPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Kategori</span>
                   <span className="font-medium">{product.category}</span>
-                </div>
-                <Separator />
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Durum</span>
-                  <span className="font-medium">{product.item_condition}</span>
-                </div>
-                <Separator />
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Konum</span>
-                  <div className="flex items-center">
-                    <MapPin className="h-4 w-4 mr-1 text-gray-400" />
-                    <span className="font-medium">{product.location}</span>
-                  </div>
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">

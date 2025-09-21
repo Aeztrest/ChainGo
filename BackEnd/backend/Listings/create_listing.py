@@ -15,8 +15,6 @@ class ListingFormData(BaseModel):
     description: str
     price: float
     category: Optional[str]
-    location: Optional[str]
-    condition: Optional[str]
     username: Optional[str]
 
 router = APIRouter()
@@ -30,8 +28,6 @@ async def create_listing(
     description: str = Form(...),
     price: float = Form(...),
     category: str = Form(None),
-    location: str = Form(None),
-    condition: str = Form(None),
     username: str = Form(...),
     images: List[UploadFile] = File([]),
     db: Session = Depends(get_db)
@@ -50,8 +46,6 @@ async def create_listing(
         description=description,
         price=price,
         category=category,
-        location=location,
-        item_condition=condition,
         username=username,
         images=json.dumps(saved_filenames),
         is_sold=False,

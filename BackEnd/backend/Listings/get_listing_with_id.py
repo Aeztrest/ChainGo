@@ -19,8 +19,6 @@ def get_listing(product_id: int, db: Session = Depends(get_db)):
         "description": listing.description,
         "price": str(listing.price),
         "category": listing.category,
-        "location": listing.location,
-        "item_condition": listing.item_condition,
         "username": listing.username,
         "images": json.loads(listing.images) if listing.images else [],
         "created_at": listing.created_at.isoformat(),
